@@ -91,7 +91,8 @@ const styles = {
 
   buttonText: {
     fontSize: 50,
-    color: '#007aff'
+    color: '#007aff',
+    fontFamily: 'Arial'
   }
 }
 
@@ -194,7 +195,7 @@ export default class extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (!nextProps.autoplay && this.autoplayTimer) clearTimeout(this.autoplayTimer)
-    this.setState(this.initState(nextProps, this.props.index !== nextProps.index))
+    this.setState(this.initState(nextProps, this.state.index !== nextProps.index))
   }
 
   componentDidMount () {
@@ -257,6 +258,7 @@ export default class extends Component {
 
     this.internals = {
       ...this.internals,
+      offset: initState.offset,
       isScrolling: false
     }
     return initState
@@ -420,6 +422,7 @@ export default class extends Component {
     const newState = {}
     newState.index = index
     newState.loopJump = loopJump
+    newState.offset = offset
 
     this.internals.offset = offset
 
