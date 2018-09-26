@@ -195,7 +195,13 @@ export default class extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (!nextProps.autoplay && this.autoplayTimer) clearTimeout(this.autoplayTimer)
-    this.setState(this.initState(nextProps, this.state.index !== nextProps.index))
+    this.setState(this.initState(nextProps, this.state.index !== nextProps.index), state => {
+      if (Platform.OS === 'android') {
+        this.scrollView.setPageWithoutAnimation(this.state.index)
+      } else if ((Platform.OS === 'ios')) {
+        this.scrollBy(0, false)
+      }
+    })
   }
 
   componentDidMount () {
@@ -253,8 +259,8 @@ export default class extends Component {
     }
 
     initState.offset[initState.dir] = initState.dir === 'y'
-      ? height * props.index
-      : width * props.index
+      ? initState.height * props.index
+      : initState.width * props.index
 
     this.internals = {
       ...this.internals,
@@ -422,7 +428,7 @@ export default class extends Component {
     const newState = {}
     newState.index = index
     newState.loopJump = loopJump
-    newState.offset = offset
+    // newState.offset = offset
 
     this.internals.offset = offset
 
